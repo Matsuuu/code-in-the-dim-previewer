@@ -100,12 +100,14 @@ function initFrame(draftEntry) {
     return iframe;
 }
 
-initializeFrames(exampleAPIResponse);
+function getLatestProgress() {
+    return fetch("https://citd.kaljaa.fi/progress/czg").then(res => res.json());
+}
 
-updatePreviewWindows(exampleAPIResponse);
+const initialResponse = await getLatestProgress();
+initializeFrames(initialResponse);
 
-// TODO: Replace this with polling system
-setInterval(() => {
-    exampleAPIResponse.latestDrafts[0].code += "\n<p>Addition</p>";
-    //updatePreviewWindows(exampleAPIResponse);
+setInterval(async () => {
+    const apiResponse = await getLatestProgress();
+    updatePreviewWindows(apiResponse);
 }, 3000);
