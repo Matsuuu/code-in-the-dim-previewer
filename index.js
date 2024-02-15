@@ -59,8 +59,9 @@ const contestantFrames = {};
  */
 export function updatePreviewWindows(apiResponse) {
 
+    console.log(apiResponse)
     for (const draft of apiResponse.latestDrafts) {
-        let contestantFrame = contestantFrames[draft.id];
+        let contestantFrame = contestantFrames[draft.nonce];
         if (!contestantFrame) {
             contestantFrame = initFrame(draft);
         }
@@ -96,7 +97,7 @@ function initFrame(draftEntry) {
     div.appendChild(contestantNameEl);
     document.body.appendChild(div);
 
-    contestantFrames[draftEntry.id] = iframe;
+    contestantFrames[draftEntry.nonce] = iframe;
     return iframe;
 }
 
@@ -106,6 +107,7 @@ function getLatestProgress() {
 
 const initialResponse = await getLatestProgress();
 initializeFrames(initialResponse);
+updatePreviewWindows(initialResponse);
 
 setInterval(async () => {
     const apiResponse = await getLatestProgress();
