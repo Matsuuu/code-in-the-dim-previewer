@@ -8,7 +8,9 @@ const COLORS = [
     'rgb(201, 203, 207)' // grey
 ];
 
+const PROGRESS_API_URL = "https://citd.kaljaa.fi/progress";
 const ROUND_ID = "czg";
+const ROUND_NAME = "";
 
 const contestantFrames = {};
 
@@ -39,7 +41,14 @@ export function updatePreviewWindows(apiResponse) {
             contestantFrame = initFrame(draft);
         }
 
-        const html = `<html>${draft.code}</html>`;
+        const html = `<html>
+            <head>
+                <base href="https://citd.kaljaa.fi" />
+            </head>
+
+            ${draft.code}
+
+        </html>`;
         const blob = new Blob([html], { type: "text/html" });
         contestantFrame.src = window.URL.createObjectURL(blob);
         contestantFrame.parentElement.style.setProperty("--contestant-color", COLORS[i]);
@@ -80,7 +89,7 @@ function initFrame(draftEntry) {
 }
 
 function getLatestProgress() {
-    return fetch(`https://citd.kaljaa.fi/progress/${ROUND_ID}`).then(res => res.json());
+    return fetch(`${PROGRESS_API_URL}/${ROUND_ID}`).then(res => res.json());
 }
 
 const initialResponse = await getLatestProgress();
